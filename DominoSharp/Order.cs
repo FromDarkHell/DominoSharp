@@ -307,9 +307,15 @@ namespace DominoSharp
         /// Not really sure if this works, not really going to pay. 
         /// This requires testing.
         /// </summary>
-        public void placeOrder()
+        /// <param name="creditCard">The credit card one is paying with. null if paying in cash.</param>
+        public void placeOrder(Payment.CreditCard creditCard)
         {
-            payWith();
+            if (creditCard.cardType == Payment.CreditCard.CreditCardType.MAX)
+            {
+                throw new Exception("Credit Card is not a valid type!");
+            }
+            if (creditCard == null) payWith();
+            else payWith(creditCard);
             send(URLs.placeURL(store.country), false);
         }
 

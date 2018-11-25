@@ -18,7 +18,6 @@ namespace ExampleDomino
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-
             // Create an address based on the White House.
             Address address = new Address("1600 Pennsylvania Ave NW, Washington, DC 20500 U.S.");
 
@@ -26,7 +25,7 @@ namespace ExampleDomino
             Customer thePresident = new Customer("The", "President", address, "barack@whitehouse.gov", "2024561111");
 
             // Get the nearest & open store to the white house
-            Store nearestStore = address.getNearestStore();
+            Store nearestStore = thePresident.getNearestStore();
 
             // Get the menu of the nearestStore
             Menu menu = nearestStore.getMenu();
@@ -37,7 +36,7 @@ namespace ExampleDomino
             // Print out every MenuItem that contains "Pizza" and write its name & price.
             foreach (Menu.MenuItem item in menuItems)
             {
-                Console.WriteLine(item.name + " | " + item.price);
+                Console.WriteLine(item.code + " | " + item.name + " | " + item.price);
             }
 
             // Create a new Order.
@@ -67,6 +66,12 @@ namespace ExampleDomino
             // Now we're gonna remove some coupons to spend more $$$, who needs it anyways.
             order.removeCoupon(new Coupon("3351", 1));
             order.removeCoupons(new Coupon[] { new Coupon("5152", 1), new Coupon("8696", 1) });
+
+            // Create a new CreditCard
+            Payment.CreditCard card = new Payment.CreditCard("4100123422343234", "0115", "777", "90210");
+
+            // We do this just so we don't end up buying about way too many pizzas in debugging.
+            if (false) order.placeOrder(card);
 
             // Wait.
             Console.ReadLine();

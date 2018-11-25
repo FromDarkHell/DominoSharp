@@ -56,7 +56,7 @@ namespace DominoSharp
         /// <param name="card">The card to pay with (null if using cash)</param>
         public void placeOrder(Order order, Payment.CreditCard card)
         {
-            order.placeOrder();
+            order.placeOrder(card);
         }
 
         /// <summary>
