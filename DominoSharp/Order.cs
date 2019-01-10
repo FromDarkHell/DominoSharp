@@ -316,7 +316,12 @@ namespace DominoSharp
             }
             if (creditCard == null) payWith();
             else payWith(creditCard);
-            return send(URLs.placeURL(store.country), false);
+            JObject response = send(URLs.placeURL(store.country), false);
+
+            if (response["Status"].ToString() == "-1")
+                throw new Exception("Dominos returned -1 due to order being, \"" + errorReason(response["Order"]) + "\" | Response: " + response.ToString());
+
+            return response;
         }
 
         #region Pay With
@@ -331,7 +336,7 @@ namespace DominoSharp
             JObject response = send(URLs.priceURL(store.country), true);
             // Throw an exception if we messed up.
             if (response["Status"].ToString() == "-1")
-                throw new Exception(string.Format("Get Price Failed (Dominos Returned -1 Response): {0}", response));
+                throw new Exception("Dominos returned -1 due to order being, \"" + errorReason(response["Order"]) + "\" | Response: " + response.ToString());
 
             data["Payments"] = new JArray {
                     new JObject
@@ -354,7 +359,7 @@ namespace DominoSharp
 
             // Throw an exception if we messed up.
             if (response["Status"].ToString() == "-1")
-                throw new Exception(string.Format("Get Price Failed (Dominos Returned -1 Response): {0}", response));
+                throw new Exception("Dominos returned -1 due to order being, \"" + errorReason(response["Order"]) + "\" | Response: " + response.ToString());
 
             data["Payments"] = new JArray
             {
@@ -410,6 +415,27 @@ namespace DominoSharp
                 customer.firstName,
                 customer.lastName,
                 data["Products"].ToString().Count(f => f == '\n'));
+        }
+        #endregion
+
+        #region Error Helpers
+        private string errorReason(JToken data)
+        {
+            try
+            {
+                JToken statusItems = data["StatusItems"];
+                if (statusItems.ToArray().Length > 2)
+                {
+                    JToken lastCode = statusItems.Last;
+                    string code = (lastCode["Code"]).ToString();
+                    return code;
+                }
+
+                return "None";
+            }
+            catch (Exception) { }
+
+            return "";
         }
         #endregion
     }

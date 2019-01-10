@@ -70,7 +70,7 @@ namespace ExampleDomino
             Payment.CreditCard card = new Payment.CreditCard("4100123422343234", "0115", "777", "90210");
 
             // We do this just so we don't end up buying about way too many pizzas in debugging.
-            if (false) order.placeOrder(card);
+            //Console.WriteLine(order.placeOrder(card));
             Console.WriteLine(order.payWith(card));
 
             // Wait.
