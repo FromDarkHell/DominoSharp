@@ -37,7 +37,7 @@ namespace DominoSharp
         /// <param name="store">The store this order takes place at</param>
         /// <param name="customer">The customer placing the order</param>
         /// <param name="country">The country this order is taking place in</param>
-        public Order(Store store, Customer customer, URLs.Country country)
+        public Order(Store store, Customer customer)
         {
             this.store = store;
             this.menu = store.getMenu();
@@ -329,10 +329,9 @@ namespace DominoSharp
 
             // Get the price to check that everything worked okay
             JObject response = send(URLs.priceURL(store.country), true);
-
             // Throw an exception if we messed up.
             if (response["Status"].ToString() == "-1")
-                throw new Exception(string.Format("Get Price Failed: {0}", response));
+                throw new Exception(string.Format("Get Price Failed (Dominos Returned -1 Response): {0}", response));
 
             data["Payments"] = new JArray {
                     new JObject
@@ -355,7 +354,7 @@ namespace DominoSharp
 
             // Throw an exception if we messed up.
             if (response["Status"].ToString() == "-1")
-                throw new Exception(string.Format("Get Price Failed: {0}", response));
+                throw new Exception(string.Format("Get Price Failed (Dominos Returned -1 Response): {0}", response));
 
             data["Payments"] = new JArray
             {
@@ -365,9 +364,9 @@ namespace DominoSharp
                     {"Expiration",  card.expirationDate},
                     {"Amount", 0 },
                     {"CardType", card.cardType.ToString().ToUpper() },
-                    {"Number", int.Parse(card.number) },
-                    {"SecurityCode", int.Parse(card.cvv) },
-                    {"PostalCode", int.Parse(card.zip) }
+                    {"Number", long.Parse(card.number) },
+                    {"SecurityCode", long.Parse(card.cvv) },
+                    {"PostalCode", long.Parse(card.zip) }
                 }
             };
 

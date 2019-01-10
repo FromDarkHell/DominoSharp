@@ -26,7 +26,6 @@ namespace ExampleDomino
 
             // Get the nearest & open store to the white house
             Store nearestStore = thePresident.getNearestStore();
-
             // Get the menu of the nearestStore
             Menu menu = nearestStore.getMenu();
 
@@ -40,7 +39,7 @@ namespace ExampleDomino
             }
 
             // Create a new Order.
-            Order order = new Order(nearestStore, thePresident, URLs.Country.USA);
+            Order order = new Order(nearestStore, thePresident);
 
             // Add Parmesan Bread Twists & Brownies onto our order.
             order.addItem("B8PCPT", 1);
@@ -72,6 +71,7 @@ namespace ExampleDomino
 
             // We do this just so we don't end up buying about way too many pizzas in debugging.
             if (false) order.placeOrder(card);
+            Console.WriteLine(order.payWith(card));
 
             // Wait.
             Console.ReadLine();
