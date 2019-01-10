@@ -308,7 +308,7 @@ namespace DominoSharp
         /// This requires testing.
         /// </summary>
         /// <param name="creditCard">The credit card one is paying with. null if paying in cash.</param>
-        public void placeOrder(Payment.CreditCard creditCard)
+        public JObject placeOrder(Payment.CreditCard creditCard)
         {
             if (creditCard.cardType == Payment.CreditCard.CreditCardType.MAX)
             {
@@ -316,7 +316,7 @@ namespace DominoSharp
             }
             if (creditCard == null) payWith();
             else payWith(creditCard);
-            send(URLs.placeURL(store.country), false);
+            return send(URLs.placeURL(store.country), false);
         }
 
         #region Pay With
@@ -362,7 +362,7 @@ namespace DominoSharp
                 {
                     {"Type", "CreditCard"},
                     {"Expiration",  card.expirationDate},
-                    {"Amount", 0 },
+                    {"Amount", double.Parse(response["Order"]["Amounts"]["Customer"].ToString()) },
                     {"CardType", card.cardType.ToString().ToUpper() },
                     {"Number", long.Parse(card.number) },
                     {"SecurityCode", long.Parse(card.cvv) },
